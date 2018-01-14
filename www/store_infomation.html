@@ -1,0 +1,199 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+    <link rel="stylesheet" href="components/loader.css">
+    <link rel="stylesheet" href="./css/default.css">
+    <link rel="stylesheet" href="./css/sp-default.css">
+    <link rel="stylesheet" href="css/always_store.css">
+    <script src="components/loader.js"></script>
+    <script src="class/ShopManager.js"></script>
+    <script src="class/LocalDBManager.js"></script>
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFQwi_3lvOo-oxjrfe8kcUTQwR0IKnj7w&callback=initMap">
+    </script>
+    <script>
+        var shopInstance = new ShopManager();
+        var localDB = new LocalDBManager();
+        var tabletID = localDB.selectTabletID();
+        var shoplist = shopInstance.getShopList(tabletID);
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="title"><p>お店の情報</p></div>
+        <div id="map" style="height:100%; text-align:center;"><div style="margin:30px;">地図情報を読み込み中...</div></div>
+    </div>
+    
+    
+        <div class="menu">
+            <div class="item-list">
+                <div class="img-size"><img class="item" onclick="location.href='index.html'"src="img/home2_gray.png"></div>
+                <div class="img-size"><img class="item" onclick="location.href='store_infomation.html'"src="img/map_icon_gr.png"></div>
+                <div class="img-size"><img class="item" onclick="location.href='shopping_list.html'"src="img/shopping_bag_gray.png"></div>
+                <div class="img-size"><img class="item" onclick="location.href='setting.html'"src="img/config_icon_gray.png"></div>
+            </div>
+        </div> 
+    </div>
+    <script>
+    var map;
+    var marker1 = [];//現在地のMerker
+    var marker2 = [];//shoplistのMerKer
+    var message = [];//吹き出し
+
+ 
+    function initMap() {
+        
+        if (!navigator.geolocation) {
+            console.log('Geolocation APIに対応していません');
+            return false;
+        }
+ 
+        //まとめた位置を入れる変数
+        var latitude_value;
+        var longitude_value;
+        var south;	// 左下の緯度
+	    var west;	// 左下の経度
+	    var north;	// 右上の緯度
+	    var east;	// 右上の経度
+        var cnt = 1;
+
+ 
+        // 現在地の取得
+        navigator.geolocation.getCurrentPosition(function(position) {
+            // 緯度経度の取得
+            latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            var latitude_value = position.coords.latitude;
+            var longitude_value = position.coords.longitude;
+       
+            // 地図の作成
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 15,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+
+            //現在地のMarker
+            marker1 = new google.maps.Marker({
+                icon: new google.maps.MarkerImage(
+                './img/map_location.png',    // url
+                new google.maps.Size(32,32), // size
+                new google.maps.Point(0,0),  // origin
+                ) 
+            });
+        
+            var position = marker1.setPosition(new google.maps.LatLng(latitude_value,longitude_value));
+            marker1.setMap(map);
+
+            //現在地吹き出し
+            var content='<b>現在地</b>';
+            var location = new google.maps.InfoWindow({
+            content: content
+            });
+
+            //吹き出しを表示
+            location.open(map,marker1);
+        
+            // マーカーをクリックしたとき吹き出しを表示
+            marker1.addListener('click', function() { 
+                location.open(map, marker1); // 吹き出しの表示
+            });
+        
+        
+            //表示領域初期設定
+            south = latitude_value;
+            west = longitude_value;
+            north = latitude_value;
+            east = longitude_value;
+        
+             //shoplistの位置
+            for (var i = 0; i < shoplist.length; i++) {
+                markerLatLng = {
+                    lat: Number(shoplist[i]['latitude']), 
+                    lng: Number(shoplist[i]['longitude'])
+                };            
+            
+                marker2[i] = new google.maps.Marker({ 
+                    position: markerLatLng, 
+                    map: map,
+                    icon: new google.maps.MarkerImage(
+                        'img/map_shopIcon.png', // url
+                        new google.maps.Size(32,32) // size
+                    )
+                });
+                
+                //var location = getDistance(position.coords.latitude,position.coords.longitude,shoplist[i]['latitude'],shoplist[i]['longitude']);
+                //alert(location);
+                
+                //全体の領域を表示する
+                if(south > shoplist[i]['latitude']){
+                    south = shoplist[i]['latitude'];
+                    //alert(south);
+                }else if(west > shoplist[i]['longitude']){
+                    west = shoplist[i]['longitude'];
+                    //alert(west);
+                }else if(north < shoplist[i]['latitude']){
+                    north = shoplist[i]['latitude'];
+                    //alert(north);
+                }else if(east < shoplist[i]['longitude']){
+                    east = shoplist[i]['longitude'];
+                    //alert(east);
+                }
+                
+                //shopListの吹き出し
+                var content=　'<b>'+shoplist[i].shopName+'</b>';
+                
+                message[i] = new google.maps.InfoWindow({
+                    content: content
+                 });
+        
+                //message[i].open(map,marker2[i]);
+                markerEvent(i); // マーカーにクリックイベントを追加
+            
+            //     latitude_value += data[i]['lat'];
+            //     longitude_value += data[i]['lng'];
+            // 
+            //     cnt++;
+            }
+            
+        var sw = new google.maps.LatLng(south, west) ;    // 左下の緯度、経度
+        var ne = new google.maps.LatLng(north, east) ;    // 右上の緯度、経度
+        var LatLngBounds = new google.maps.LatLngBounds(sw,ne);  
+        map.fitBounds(LatLngBounds) ;
+        
+        //中心を設定
+        // latitude_value = latitude_value/cnt;
+        // longitude_value = longitude_value/cnt;
+        // var lat = new google.maps.LatLng(latitude_value,longitude_value);
+        // map.setCenter(lat);
+        
+        }, function() {
+            console.log('位置情報取得に失敗しました');
+        });
+    
+    }
+    
+    function markerEvent(i) {
+        marker2[i].addListener('click', function() { // マーカーをクリックしたとき
+            message[i].open(map, marker2[i]); // 吹き出しの表示
+        });
+    }
+    
+    //距離の計算//
+//     function getDistance(lat1, lng1, lat2, lng2) {
+// 
+//        function radians(deg){
+//           return deg * Math.PI / 180;
+//        }
+// 
+//        return 6378.14 * Math.acos(Math.cos(radians(lat1))* 
+//         Math.cos(radians(lat2))*
+//         Math.cos(radians(lng2)-radians(lng1))+
+//         Math.sin(radians(lat1))*
+//         Math.sin(radians(lat2)));
+//     }
+
+    </script>
+</body>
+</html>

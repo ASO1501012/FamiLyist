@@ -1,0 +1,171 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src * data:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+    <script src="components/loader.js"></script>
+    <link rel="stylesheet" href="components/loader.css">
+    <link rel="stylesheet" href="./css/default.css">
+    <link rel="stylesheet" href="./css/sp-default.css">
+    <link rel="stylesheet" href="css/shopping_list.css">
+    <script src="class/ListManager.js"></script>
+    <script src="class/LocalDBManager.js"></script>
+    <script>
+      
+    function get(){
+        
+        //tabletIDとphoneIDを取得
+        var localDBManager = new LocalDBManager();        
+        var tabletID = localDBManager.selectTabletID();
+        var phoneID = localDBManager.selectPhone();
+    
+        //リストを取得
+        var listManager = new ListManager();
+        var goodslist = listManager.getGoodsList(tabletID);
+            
+        //追加する記述 
+        $(function() {
+        
+          $('.shopping_list').remove();
+          $('.product_name').remove();
+          $('.quantity').remove();
+          $('<img>').remove();
+          $('.other_people').remove();
+          $('#goodsID').remove();
+          $('#boughtSign').remove();
+          $('#buyPhoneID').remove();
+          
+       
+       
+            var div = $(".list-container");
+            
+            for (var i = 0; i < goodslist.length; i++) { 
+                //numの判定の変数
+                var numSign = goodslist[i].num;
+                
+                if(numSign != 0){
+                    
+                    var list = $("<div>")
+                    .attr("class", "shopping_list")
+                    .css('background-color', '#f1fff0')
+                    .appendTo(div);
+                    $("<div>")
+                    .attr("class", "product_name")
+                    .append(goodslist[i].goodsName)
+                    .appendTo(list);
+                    $("<div>")
+                    .attr("class", "quantity")
+                    .append(escape(goodslist[i].num)+"個")            
+                    .appendTo(list);
+                    var img = $("<img>")
+                    .attr("src", "img/shopping_icon_gr.png")
+                    .appendTo(list);
+                    $('<input/>',{type:'hidden',id:'goodsID',value:goodslist[i].goodsID})
+                    .appendTo(list);
+                    $('<input/>',{type:'hidden',id:'boughtSign',value:goodslist[i].boughtSign})
+                    .appendTo(list);
+                    $('<input/>',{type:'hidden',id:'buyPhoneID',value:goodslist[i].phoneID})
+                    .appendTo(list);
+                                        
+                    var flag = goodslist[i].boughtSign;
+                    var buyPhoneID = goodslist[i].phoneID;
+                    console.log(flag);
+                    
+                    //boughtSginのチェック
+                    if(flag == 1){
+                        //買ったのが自分なのかチェック
+                        if(phoneID == buyPhoneID){
+                            list.css("background-color", "#8fbc8f");
+                            list.css("color", "#fff");
+                            img.attr("src","img/back.png");
+                            console.log("自分で買いました");
+                        }else if(phoneID != buyPhoneID){
+                            $("<div>")
+                            .attr("class", "other_people")
+                            .append("他の人")            
+                            .appendTo(list);
+                            list.css("background-color", '#ffc699');
+                            list.css("color", "#fff");
+                            img.remove();
+                            console.log("違う人が買いました");
+                        }
+                    
+                    }else if(flag == 0){
+                        list.attr("style", "background-color:#f1fff0;");
+                        img.attr("src","img/shopping_icon_gr.png");
+                    }
+                }else{
+                    console.log("個数が０です");
+                }
+            }
+
+        });
+        
+        
+        //チェックの判定
+        $(function(){
+            $(".shopping_list").on('click',function(){
+                var goodsID = $(this).find('#goodsID').val();   
+                var boughtSign = $(this).find('#boughtSign').val();
+                var buyPhoneID = $(this).find('#buyPhoneID').val();
+                console.log(buyPhoneID);
+                
+                //自分のphoneIDと一致しているかの確認
+                if(buyPhoneID == phoneID || buyPhoneID == ""){
+                    if(boughtSign == 0){
+                        //goodsをcheckする
+                        console.log("チェック");
+                        listManager.checkGoodsList(goodsID,tabletID,phoneID);
+                        /*$(this).css('background-color', '#8fbc8f');
+                        $(this).css('color', '#fff');*/
+                        //$(this).find('#boughtSign').val(1);
+                        /*$(this).find('img').attr("src","img/back.png");*/
+                    }else if(boughtSign == 1){
+                        //checkをはずす
+                        console.log("外す");
+                        listManager.untickGoodsList(goodsID,tabletID,phoneID);
+                        /*$(this).css('background-color', '#f1fff0');
+                        $(this).css('color', '#000000');*/
+                        //$(this).find('#boughtSign').val(0);        
+                        /*$(this).find('img').attr("src","img/shopping_icon_gr.png");*/
+                    }
+                }else{
+                    console.log("自分以外です");
+                }
+                get();
+            });
+        });
+    
+        // function deleteItemList(){
+        //     //Itemを削除
+        //     //listManager.deleteList(goodsID);        
+        // }
+    }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="title"><p>買い物リスト</p></div>
+            <div class="list-container">
+                <!-- グッズのリストが入る -->
+            </div>
+        </div>
+    </div>
+    
+        <div class="menu">
+            <div class="item-list">
+                <div class="img-size"><img class="item" onclick="location.href='index.html'"src="img/home2_gray.png"></div>
+                <div class="img-size"><img class="item" onclick="location.href='store_infomation.html'"src="img/map_icon_gray.png"></div>
+                <div class="img-size"><img class="item" src="img/shopping_bag_gr.png"></div>
+                <div class="img-size"><img class="item" onclick="location.href='setting.html'"src="img/config_icon_gray.png"></div>
+            </div>
+        </div> 
+    </div>
+    <script>
+        //関数getlist()を1000ミリ秒間隔で呼び出す
+        var interval = setInterval('get()',200);
+    </script>
+</body>
+</html>
+

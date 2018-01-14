@@ -1,0 +1,90 @@
+/* This is a CSS file */
+@charset "UTF-8";
+body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+img {
+    height: 10vw;
+}
+.container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.list-container{
+    overflow-y: scroll;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+}
+
+
+.title {
+    text-align: center;
+    background-color: #eee;
+    color: #330000;
+    height: 12%;
+    line-height: 18vh;
+    vertical-align: bottom;
+    font-size: 20px;
+    border-bottom: 1px solid #CCCCCC;
+}
+.main_list {
+    background-color: #a8ffd3;
+    color: #330000;
+    text-align: center;
+    flex: 7;
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid #CCCCCC;
+}
+.main_info {
+    background-color: #c1ffe0;
+    color: #330000;
+    text-align: center;
+    flex: 3;
+    display: flex;
+    border-bottom: 1px solid #CCCCCC;
+}
+.main_pair{
+    background-color: #a8ffd3;
+    color: #330000;
+    text-align: center;
+    flex: 3;
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid #CCCCCC;
+}
+.menu {
+    height: 13%;
+    display: flex;
+    border-top:solid 1px #999999;
+    //flex-direction: column;
+}
+.item-list {
+    display: flex;
+    align-items: center;
+}
+.img-size {
+    height: 6.5vh;
+    //border: 1px red solid;
+    flex: 1;
+}
+.img-size img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.vertical-center {
+    width: 100%;
+    vertical-align: middle;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    //border: yellow solid 2px;
+    border-bottom: ;
+}

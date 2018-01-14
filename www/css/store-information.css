@@ -1,0 +1,30 @@
+/* This is a CSS file */
+html {
+    width: 100%;
+    height: 100%;
+}
+body {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+p {
+    padding: 0;
+    margin: 0;
+}
+.shop-info:nth-child(odd) {
+    background-color:#f9d6d4;
+}
+.shop-info:nth-child(even) {
+    background-color:#d7847e;
+}
+.list-container{
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #eee;
+    border: solid 1px red;
+}

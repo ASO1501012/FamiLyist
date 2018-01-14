@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+    <link rel="stylesheet" href="components/loader.css">
+    <script src="components/loader.js"></script>
+    <link rel="stylesheet" href="css/default.css">
+    <link rel="stylesheet" href="css/sp-default.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/user_nickname.css">
+    <script src="class/UserManager.js"></script>
+    <script src="class/LocalDBManager.js"></script>
+    <script>
+        var userManagerInstance = new UserManager();
+        var localDBManager = new LocalDBManager();
+        var flag = 0;
+
+        
+        //ニックネームを取得
+        var nickName = localDBManager.selectNickname(); 
+
+        function Nickname(){
+            //入力されたニックネーム
+            var nick = document.getElementById('nickname').value;
+            nick = escape(nick);
+            if(nick == ""){
+                console.log("空です");
+            }else if(nick != ""){
+                if(nickName == null){
+                    //ニックネーム登録
+                    userManagerInstance.addNickName(nick);
+                }else if(nickName != null){
+                    //ニックネーム編集
+                    userManagerInstance.editNickName(nick);
+                }
+                //変更完了のページへ
+                location.href = "user_change.html";
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="title">
+        <img src="img/back_blue.png" onclick="location.href='setting.html'">
+        <dis>ユーザ設定</div>
+    </div>
+    
+    <div class="wrap-main">
+        <div class="input-form">
+            <p>ニックネーム編集</p>
+            <input type="text" id="nickname" placeholder="ユーザニックネームを入力してください">
+            <button id="submit" onclick="Nickname()">決定</button>
+        </div>
+    </div>
+    
+    
+</body>
+</html>

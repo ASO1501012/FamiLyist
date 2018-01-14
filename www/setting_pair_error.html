@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+    <link rel="stylesheet" href="components/loader.css">
+    <script src="components/loader.js"></script>
+    <link rel="stylesheet" href="css/default.css">
+    <link rel="stylesheet" href="css/sp-default.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/error.css">
+    <script src="class/UserManager.js"></script>
+    <script src="class/LocalDBManager.js"></script>
+    <script>    
+        var userManagerInstance = new UserManager();
+        var localDBManager = new LocalDBManager();
+        var flag = 0;
+       
+        //Tabletとリンク
+        function linkTablet(){
+            var phoneID = localDBManager.selectPhone();
+            var tabletID_value = document.getElementById('tabletID').value;
+            
+            if(tabletID_value == ""){
+                    location.href = "pair_error.html";
+            }else{
+                var link = userManagerInstance.linkTablet(tabletID_value,phoneID);
+                if(link == ""){
+                    location.href = "pair_error.html";
+                }else{
+                    location.href = "pair_success.html";
+                }
+            }    
+        }
+    </script>
+</head>
+<body>
+    <div class="title">
+        <img src="img/back_blue.png" onclick="location.href='setting.html'">
+        <dis>ペアリング</div>
+    </div>
+    
+    <div class="wrap-main">
+        <div class="input-form">
+            <div class="surprised_mark"><img src="img/error.png"></div>
+            <p>失敗しました</p>
+            <p>もう一度タブレットIDを入力してください</p>
+            <input type="number" id="tabletID" placeholder="タブレットID">
+            <button onclick="linkTablet()">同期</button>
+        </div>
+    </div>
+    
+    
+</body>
+</html>

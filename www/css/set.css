@@ -1,0 +1,121 @@
+/* This is a CSS file */
+/* This is a CSS file */
+@charset "UTF-8";
+body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+img {
+    height: 10vw;
+}
+.container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.container img{
+    display: flex;
+    margin-left: auto;
+    width: 4%;
+}
+
+.title {
+    text-align: center;
+    background-color: #bd8683;
+    color: #ffffff;
+    height: 12%;
+    line-height: 18vh;
+    vertical-align: bottom;
+    font-size: 20px;
+    border-bottom: 1px solid #CCCCCC;
+}
+.User_Settings {
+    padding-left: 5vw;
+    text-align: center;
+    flex: 1.5;
+    display: flex;
+    justify-content: center;
+    color: #330000;
+    border-bottom: 1px solid #CCCCCC;
+    -webkit-align-items: center; /* 縦方向中央揃え（Safari用） */
+    align-items: center; /* 縦方向中央揃え */
+}
+.Tablet_Settings {
+    padding-left: 5vw;
+    text-align: center;
+    flex: 1.5;
+    display: flex;
+    color: #330000;
+    border-bottom: 1px solid #CCCCCC;
+    -webkit-align-items: center; /* 縦方向中央揃え（Safari用） */
+    align-items: center; /* 縦方向中央揃え */
+}
+.space{
+    background-color: #f2eaea;
+    text-align: center;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid #CCCCCC;
+}
+.help{
+    padding-left: 5vw;
+    text-align: center;
+    flex: 1.5;
+    display: flex;
+    justify-content: center;
+    color: #330000;
+    border-bottom: 1px solid #CCCCCC;
+    -webkit-align-items: center; /* 縦方向中央揃え（Safari用） */
+    align-items: center; /* 縦方向中央揃え */
+}
+.opinion{
+    padding-left: 5vw;
+    text-align: center;
+    flex: 1.5;
+    display: flex;
+    justify-content: center;
+    color: #330000;
+    border-bottom: 1px solid #CCCCCC;
+    -webkit-align-items: center; /* 縦方向中央揃え（Safari用） */
+    align-items: center; /* 縦方向中央揃え */
+}
+.space2{
+    background-color: #f2eaea;
+    text-align: center;
+    flex: 9;
+    display: flex;
+    justify-content: center;
+    border-bot
+}
+.menu {
+    height: 11%;
+    display: flex;
+    border-top:solid 1px #999999;
+    //flex-direction: column;
+}
+.item-list {
+    display: flex;
+    align-items: center;
+}
+.img-size {
+    height: 6.5vh;
+    //border: 1px red solid;
+    flex: 1;
+}
+.img-size img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.vertical-center {
+    width: 100%;
+    vertical-align: middle;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    //border: yellow solid 2px;
+    border-bottom: ;
+}
